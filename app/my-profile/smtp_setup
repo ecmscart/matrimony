@@ -1,0 +1,69 @@
+Kodee
+Use these Hostinger Email SMTP settings in Node.js:
+
+Host: smtp.hostinger.com
+Port: 465 with SSL
+or 587 with TLS / STARTTLS
+Username: your full email address
+Password: your mailbox password
+Step 1 — check the mail settings in hPanel
+Go to Emails → Manage → Connect Apps & Devices.
+image
+image
+
+Step 2 — install Nodemailer
+
+
+Copy
+npm install nodemailer dotenv
+Step 3 — add .env
+
+
+Copy
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_USER=yourname@yourdomain.com
+SMTP_PASS=your-email-password
+Step 4 — create the mailer
+
+
+Copy
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: true, // true for 465, false for 587
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+async function sendTestEmail() {
+  await transporter.sendMail({
+    from: process.env.SMTP_USER,
+    to: "receiver@example.com",
+    subject: "Test email",
+    text: "Hello from Node.js",
+  });
+}
+
+sendTestEmail().catch(console.error);
+If you want, I can also give you an Express route version or a Gmail/HTML email template version.
+
+
+
+Suggestions
+
+Can you show me the Express route version?
+
+How can I use an HTML email template with this?
+
+How do I check if my emails are being sent successfully?
+
+es — Username is the full email address (for example, name@mahershadi.com), and Password is the mailbox password for that inbox, not your hPanel password.
+If you forgot it, reset the email password in Emails → Manage.
+For Node.js, keep SMTP_USER as the full email and SMTP_PASS as that mailbox password.

@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fffaf4;
+  --foreground: #18161a;
+  --surface: #ffffff;
+  --surface-soft: #fff5eb;
+  --color-primary: #d9485f;
+  --color-primary-light: #f17b8f;
+  --color-primary-dark: #b7354a;
+  --color-secondary: #ef6f4b;
+  --color-accent: #ffd6b6;
+  --color-gold: #d48a2e;
+  --color-gold-light: #f5c777;
+  --color-ink-soft: #5a5560;
+  --ring-soft: rgba(212, 72, 95, 0.22);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-gold: var(--color-gold);
+  --color-gold-light: var(--color-gold-light);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-ink-soft: var(--color-ink-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background-image:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(241, 123, 143, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 88% 4%,
+      rgba(245, 199, 119, 0.2),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(212, 138, 46, 0.08),
+      transparent 45%
+    );
+}
+
+.gradient-primary {
+  background: linear-gradient(125deg, #d9485f 0%, #ef6f4b 48%, #f5c777 100%);
+}
+
+.gradient-hero {
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(245, 199, 119, 0.32),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(241, 123, 143, 0.32),
+      transparent 40%
+    ),
+    linear-gradient(145deg, #2b2032 0%, #1c1a2e 45%, #30243f 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(118deg, #d9485f, #ef6f4b 52%, #d48a2e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 16px 38px -28px rgba(34, 18, 28, 0.55);
+}
+
+.headline-serif {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: -0.015em;
+}
+
+.soft-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring-soft);
+}
+
+.ornament-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-14px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes float-soft-alt {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(16px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes twinkle-soft {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(18deg) scale(1.15);
+  }
+}
+
+.animate-float-soft {
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+.animate-float-soft-alt {
+  animation: float-soft-alt 6s ease-in-out infinite 1s;
+}
+
+.animate-twinkle-soft {
+  animation: twinkle-soft 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-soft,
+  .animate-float-soft-alt,
+  .animate-twinkle-soft {
+    animation: none;
+  }
+}

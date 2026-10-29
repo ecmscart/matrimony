@@ -1,0 +1,90 @@
+"use client";
+
+import { useEffect, useId, useRef, useState } from "react";
+
+interface AutocompleteInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  /** Static suggestions (e.g. PIN-code areas). */
+  options?: string[];
+  /** Async suggestion source (e.g. university search). Debounced. */
+  fetchOptions?: (query: string) => Promise<string[]>;
+  minChars?: number;
+  maxLength?: number;
+  className?: string;
+  id?: string;
+}
+
+/**
+ * Text input with native <datalist> suggestions. Accepts either a static
+ * `options` list or a debounced async `fetchOptions` source. Free text is
+ * always allowed — suggestions are non-binding.
+ */
+export function AutocompleteInput({
+  value,
+  onChange,
+  placeholder,
+  options,
+  fetchOptions,
+  minChars = 2,
+  maxLength,
+  className,
+  id,
+}: AutocompleteInputProps) {
+  const listId = useId();
+  const [dynamicOptions, setDynamicOptions] = useState<string[]>([]);
+  const fetchRef = useRef(fetchOptions);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    fetchRef.current = fetchOptions;
+  }, [fetchOptions]);
+
+  useEffect(() => {
+    if (options || !fetchRef.current) return;
+    const q = value.trim();
+    if (q.length < minChars) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      void fetchRef
+        .current?.(q)
+        .then((results) => setDynamicOptions(results))
+        .catch(() => setDynamicOptions([]));
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [value, options, minChars]);
+
+  const shown =
+    options ?? (value.trim().length >= minChars ? dynamicOptions : []);
+
+  return (
+    <>
+      <input
+        id={id}
+        value={value}
+        onChange={(e) => {
+          const next = e.target.value;
+          onChange(
+            typeof maxLength === "number" ? next.slice(0, maxLength) : next,
+          );
+        }}
+        placeholder={placeholder}
+        maxLength={maxLength}
+        list={listId}
+        autoComplete="off"
+        className={
+          className ??
+          "soft-ring w-full rounded-xl border border-[#efdfce] bg-white px-4 py-3"
+        }
+      />
+      <datalist id={listId}>
+        {shown.map((opt) => (
+          <option key={opt} value={opt} />
+        ))}
+      </datalist>
+    </>
+  );
+}
